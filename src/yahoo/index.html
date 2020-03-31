@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>YahooWebAssistSearchAPI</title>
+</head>
+<body>
+  <form method="get" action="#" id="jwd">
+    <input name="q" type="text" id="search_box" placeholder="検索キーワードを入力してください。" style="width:400px; height:24px; padding-left:4px;" />
+    <input type="submit" value="検索" style="width:60px; height:28px;">
+  </form>
+  
+  <link rel="stylesheet" type="text/css" href="/js/suggest/jquery.suggest.css" />
+  
+  <script src="/js/jquery-1.7.2.min.js"></script>
+  <script src="/js/jquery.cookie.js"></script>
+  <script src="/js/suggest/jquery.suggest.utf8.js"></script>
+  <script>
+    (function($) {
+      $(document).ready(function() {
+        $(function() {
+          $("#search_box")
+            .suggest("/js/suggest/api.php",{});
+        });
+      });
+    }(jQuery));
+  </script>
+</body>
+</html>

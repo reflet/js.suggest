@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery＋GoogleSuggest</title>
+  <style type="text/css">
+    /* search */
+    #search input[type="text"]   { width:400px; height:24px; padding-left:4px; }
+    #search input[type="submit"] { width:60px; height:28px; }
+
+    /* Suggest */
+    #suggest            { position: absolute; background-color: #FFFFFF; border: 1px solid #CCCCFF; font-size: 90%; width: 406px; }
+    #suggest div        { display: block; width: 396px; padding-left:4px; overflow: hidden; white-space: nowrap; text-align:left; line-height:24px; }
+    #suggest div.select { color: #FFFFFF; background-color: #3366FF; }
+    #suggest div.over   { background-color: #99CCFF; }
+
+    /* Reference */
+    div.reference       { margin-top:10px; font-size:12px; }
+    div.reference h2    { font-size:12px; margin:0; }
+    div.reference ul    { margin:0; padding:0 0 0 40px; line-height:20px; }
+  </style>
+</head>
+<body> 
+  <!-- 検索フォーム -->
+  <form id="frmSearch">
+    <input type="text" id="keyword" size="35">
+    <input type="submit" value="検索"><br>
+    <select id="suggest" size="10"></select>
+  </form>
+  
+
+  <script src="./js/jquery-1.7.2.min.js"></script>
+  <script src="./js/Youtube.js"></script>
+  <script>
+    (function($){
+      $(document).ready(function(){
+        // --- 初期処理 ---
+        // ページロード時は suggest を隠す
+        $("#suggest").hide();
+  
+        // 検索テキストボックス
+        $("#keyword").keyup(function(e){
+          if (e.keyCode == 27) {          // esc
+            $("#suggest").hide();
+          } else if (e.keyCode == 40) {   // ↓下矢印
+            if ($("#suggest").is(":visible")) {  // suggest が表示されている
+              $("#suggest").focus()[0].selectedIndex = 0;
+              $(this).val($("#suggest").val());
+            } else {
+              yt.suggest(true);
+            }
+          } else {
+            yt.suggest();
+          }
+        });
+      });
+    }(jQuery));
+  </script>
+</body>
+</html>

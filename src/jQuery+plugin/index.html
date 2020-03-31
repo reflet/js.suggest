@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>jQueryプラグイン作成</title>
+  <style type="text/css">
+    /* search */
+    #search input[type="text"]   { width:400px; height:24px; padding-left:4px; }
+    #search input[type="submit"] { width:60px; height:28px; }
+
+    /* Reference */
+    div.reference       { margin-top:10px; font-size:12px; }
+    div.reference h2    { font-size:12px; margin:0; }
+    div.reference ul    { margin:0; padding:0 0 0 40px; line-height:20px; }
+  </style>
+  <link rel="stylesheet" href="./css/suggest.css">
+</head>
+<body>
+  <form method="get" action="./index.html" id="search">
+    <input type="text" name="q" placeholder="検索キーワードを入力してください。" />
+    <input type="submit" value="検索">
+  </form>
+  
+  <script src="./js/jquery-1.7.2.min.js"></script>
+  <script src="./js/jquery.suggest.js"></script>
+  <script>
+    (function($) {
+      $(document).ready(function() {
+        $("#search input[name='q']").suggest();
+      });
+    }(jQuery));
+  </script>
+</body>
+</html>

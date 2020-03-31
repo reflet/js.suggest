@@ -1,0 +1,24 @@
+/* Suggest */
+#suggest           {
+    position: absolute;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCFF;
+    font-size: 90%;
+    width: 406px;
+    list-style-type: none;
+    padding:0;
+    margin:0px;
+}
+#suggest li {
+    display: block;
+    width: 396px;
+    padding-left:4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align:left;
+    line-height:28px;
+    cursor: pointer;
+}
+#suggest li.over {
+    background-color: #EEEEEE;
+}

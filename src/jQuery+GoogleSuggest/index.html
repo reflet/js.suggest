@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery＋GoogleSuggest</title>
+  <style type="text/css">
+    /* search */
+    #search input[type="text"]   { width:400px; height:24px; padding-left:4px; }
+    #search input[type="submit"] { width:60px; height:28px; }
+
+    /* Suggest */
+    #suggest            { position: absolute; background-color: #FFFFFF; border: 1px solid #CCCCFF; font-size: 90%; width: 406px; }
+    #suggest div        { display: block; width: 396px; padding-left:4px; overflow: hidden; white-space: nowrap; text-align:left; line-height:24px; }
+    #suggest div.select { color: #FFFFFF; background-color: #3366FF; }
+    #suggest div.over   { background-color: #99CCFF; }
+
+    /* Reference */
+    div.reference       { margin-top:10px; line-height:24px; font-size:12px; }
+    div.reference h2    { font-size:12px; margin:0; }
+    div.reference ul    { margin:0; padding:0 0 0 40px; line-height:14px; }
+  </style>
+</head>
+<body>
+  <form id="search">
+    <input type="text" name="q" placeholder="検索キーワードを入力してください。" autocomplete="off" />
+    <input type="submit" value="検索">
+  </form>
+
+  <!-- //ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js -->
+  <script src="./js/jquery-1.7.2.min.js" charset="utf-8"></script>
+  <script src="./js/jquery.cookie.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    (function($){
+      $(document).ready(function(){
+        /**
+         * オートコンプリート機能
+         */
+        var autocomplete = (function () {
+          var func = function (id) {
+            var self = this;
+            self.elem = {
+              box  : $(id),
+              list : $('<div id="suggest" style="display:none;">')
+            };
+            self.elem.box
+              .after(self.elem.list)
+              .keyup(function(e) {
+                // Enter
+                if (e.keyCode === 13) {
+                  console.log('enter');
+                  // ESC
+                } else if (e.keyCode === 27) {
+                  self.hide();
+                  // 下矢印 (↓)
+                } else if (e.keyCode === 40) {
+                  if (self.status() === 'show') {
+                    // self.elem.list.focus()[0].selectedIndex = 0;
+                    // $(this).val(self.elem.list.val());
+                  } else {
+                    self.show();
+                  }
+                } else {
+                  self.show();
+                }
+              });
+          };
+          func.prototype = (function () {
+            return {
+              show: function () {
+                var val, self = this, list = self.elem.list, box = self.elem.box;
+                var request = function (val, callback) {
+                  $.ajax({
+                    url     : 'http://www.google.com/complete/search',
+                    type    : 'GET',
+                    data    : {hl:'ja', client:'firefox', q: val},
+                    dataType: 'jsonp',
+                    success :function(data) { callback(data[1]); }
+                  });
+                  return this;
+                };
+                var create = function(val){
+                  var elem = $('<div>' + val + '</div>');
+                  elem
+                    .mouseover(function() {
+                      $(this).addClass('over');
+                    })
+                    .mouseout(function() {
+                      $(this).removeClass('over');
+                    })
+                    .click(function() {
+                      $('div', list).removeClass('select');
+                      box.val($(this).addClass('select').text());
+                      self.hide();
+                    });
+                  return elem;
+                };
+                val = box.val();
+                if (val) {
+                  request(val, function(data) {
+                    self.clear();
+                    for (var i = 0; i < data.length; ++i) {
+                      list.append(create(data[i]));
+                    }
+                    list.show();
+                  });
+                } else {
+                  self.hide()
+                    .clear();
+                }
+                return self;
+              },
+              hide: function () {
+                this.elem.list.hide();
+                return this;
+              },
+              clear: function () {
+                this.elem.list.html('');
+                return this;
+              },
+              status: function () {
+                if (this.elem.list.is(":visible")) {
+                  return 'show';
+                }else{
+                  return 'hide';
+                }
+              }
+            };
+          }());
+          return func;
+        }());
+
+        // 利用例)
+        new autocomplete("#search input[name='q']");
+      });
+    }(jQuery));
+  </script>
+
+</body>
+</html>
