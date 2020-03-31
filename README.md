@@ -1,5 +1,5 @@
 # js.suggest
-JavaScriptでサジェスト機能を作ってみる。
+JavaScriptでサジェスト機能を作ってみる。  
 ※ bitbucketのmercurialのサポート終了に伴い、githubへ移植する  
 ※ 割と昔のコードです  
 
